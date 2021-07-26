@@ -7,7 +7,8 @@ async function connect(strHost){
   console.log(strHost);
   const dbmongo= await  mongoose.connect(strHost,{
     useNewUrlParser:true,
-    useUnifiedTopology:true
+    useUnifiedTopology:true,
+    useCreateIndex: true
   })
   .then(db=>console.log("Moongose se ha conectado :"))
   .catch(error=>console.log('Ha ocurrido un error en el momento de conectar a mongo db'));
@@ -48,6 +49,9 @@ const personSchema = new Schema({
 });
 
 let Person =model('personSchema', personSchema);;
+
+const doc = new Person ({name:'yordanis',age:42,favoriteFoods:['cad1','cad2']});
+console.log(doc);
 
 const createAndSavePerson = (done) => {
   done(null /*, data*/);
