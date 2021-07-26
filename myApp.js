@@ -40,7 +40,6 @@ connect(process.env.MONGO_URI);
 const personSchema = new Schema({
   name : {
     type:String,
-    unique:true,
     required:true
   } ,
   age:Number,
@@ -48,7 +47,7 @@ const personSchema = new Schema({
 
 });
 
-let Person =model('personSchema', personSchema);;
+const Person =model('Person', personSchema);;
 
 const doc = new Person ({name:'yordanis',age:42,favoriteFoods:['cad1','cad2']});
 console.log(doc);
