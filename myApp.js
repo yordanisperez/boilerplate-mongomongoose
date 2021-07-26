@@ -1,6 +1,6 @@
 require('dotenv').config();
 const mongoose = require('mongoose');
-
+const {Schema,model}=require('mongoose');
 
 
 async function connect(strHost){
@@ -36,7 +36,18 @@ throw new error('Ha ocurrido un error mientras se cerraban las coneciones')
 
 connect(process.env.MONGO_URI);
 
-let Person;
+const personSchema = new Schema({
+  name : {
+    type:String,
+    unique:true,
+    required:true
+  } ,
+  age:Number,
+  favoriteFoods:[String]
+
+});
+
+let Person =model('personSchema', personSchema);;
 
 const createAndSavePerson = (done) => {
   done(null /*, data*/);
