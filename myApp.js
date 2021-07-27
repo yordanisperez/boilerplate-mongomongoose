@@ -51,9 +51,9 @@ const Person =model('Person', personSchema);;
 
 
 
-
- const  createAndSavePerson = (done) => {
-  const doc = new Person ({name:'yordanis',age:42,favoriteFoods:['cad1','cad2']});
+/* data person jsom {name:'yordanis',age:42,favoriteFoods:['cad1','cad2']} */
+ const  createAndSavePerson = (dataPerson,done) => {
+  const doc = new Person (dataPerson);
      doc.save(()=>{
      done(null , doc);
       console.log(doc);
@@ -62,7 +62,11 @@ const Person =model('Person', personSchema);;
 };
 
 const createManyPeople = (arrayOfPeople, done) => {
-  done(null /*, data*/);
+  for (let i=0;i<arrayOfPeople.length;i++)
+     {
+       createAndSavePerson(arrayOfPeople[i]);
+     }
+  done(null , arrayOfPeople);
 };
 
 const findPeopleByName = (personName, done) => {
