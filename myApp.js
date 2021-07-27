@@ -170,7 +170,7 @@ const findEditThenSave = async (personId, done) => {
 const findAndUpdate = async (personName, done) => {
   const ageToSet = 20;
   let personEdit;
-  await Person.findOneAndUpdate({name:personName},{age:ageToSet},{ new: true },myDone)
+  await Person.findOneAndUpdate({name:personName},{age:ageToSet},{ new: true ,useFindAndModify:false},myDone)
           .then((person)=>{
               if (person)
               {
@@ -187,15 +187,32 @@ const findAndUpdate = async (personName, done) => {
 
 const dataPerson = {name:'yordanis',age:42,favoriteFoods:['cad1','cad2']} 
 
-//createAndSavePerson(dataPerson,myDone).then(result=>console.log(result));
-findAndUpdate('yordanis',myDone).then(result=>console.log(result));
+
+//findAndUpdate('yordanis',myDone).then(result=>console.log(result));
 
 
+const removeById = async (personId, done) => {
+  let personDel;
+  await Person.findByIdAndRemove(personId,myDone)
+  .then((person)=>{
+ 
+      console.log('removeById: ',person);
+      done(null,person);
+      personDel=person; 
+    })
+  .catch((error)=>{
+      done(error,person);
+  });
 
-
-const removeById = (personId, done) => {
-  done(null /*, data*/);
+return personDel;
 };
+
+createAndSavePerson(dataPerson,myDone)
+        .then(result=>{
+           removeById(result._id,myDone)
+           .then(result=>console.log(result));
+        });
+
 
 const removeManyPeople = (done) => {
   const nameToRemove = "Mary";
