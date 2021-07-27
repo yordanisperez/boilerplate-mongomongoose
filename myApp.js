@@ -127,13 +127,16 @@ const findPersonById = async (personId, done) => {
 };
 
 
-
-
+const myDone=(obj,doc)=>{
+  if (obj)
+    console.log("Un error al salvar los datos: ",doc); 
+ 
+}
 
 const findEditThenSave = async (personId, done) => {
   const foodToAdd = "hamburger";
   let personEdit;
-  await findPersonById(personId,done)
+  await findPersonById(personId,myDone)
           .then((person)=>{
               if (person)
               {
@@ -163,11 +166,7 @@ const findEditThenSave = async (personId, done) => {
 
 
  const dataPerson = {name:'yordanis',age:42,favoriteFoods:['cad1','cad2']} 
- const myDone=(obj,doc)=>{
-  if (obj)
-    console.log("Un error al salvar los datos: ",doc); 
- 
-}
+
 //createAndSavePerson(dataPerson,myDone).then(result=>console.log(result));
 findEditThenSave('610057b8cf0c8064f47d8926',myDone).then(result=>console.log(result));
 
