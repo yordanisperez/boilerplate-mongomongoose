@@ -186,7 +186,7 @@ const findAndUpdate = async (personName, done) => {
   return personEdit;
 };
 
-const dataPerson = {name:'yordanis',age:42,favoriteFoods:['cad1','cad2']} 
+const dataPerson = {name:'mary',age:42,favoriteFoods:['cad1','cad2']} 
 
 
 //findAndUpdate('yordanis',myDone).then(result=>console.log(result));
@@ -198,28 +198,29 @@ const removeById = async (personId, done) => {
     done(error,data);
     personDel=data;
   })
- /* .then((person)=>{
-      done(null,personDel);
-    })
-  .catch((error)=>{
-      done(error,personDel);
-  });
-*/
+ 
 return personDel;
+};
+
+
+
+
+const removeManyPeople = async (done) => {
+  const nameToRemove = "Mary";
+  let dataRem;
+  await Person.remove({name:nameToRemove},(error,data)=>{
+    done(error,data)
+    dataRem=data;
+  })
+
+  return dataRem;
 };
 
 createAndSavePerson(dataPerson,myDone)
         .then(result=>{
-           removeById(result._id,myDone)
+          removeManyPeople(myDone)
            .then(result=>console.log(result));
         });
-
-
-const removeManyPeople = (done) => {
-  const nameToRemove = "Mary";
-
-  done(null /*, data*/);
-};
 
 const queryChain = (done) => {
   const foodToSearch = "burrito";
