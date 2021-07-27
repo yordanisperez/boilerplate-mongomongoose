@@ -134,45 +134,44 @@ const findEditThenSave = async (personId, done) => {
   const foodToAdd = "hamburger";
   let personEdit;
   await findPersonById(personId,done)
-  .then((person)=>{
-      if (person)
-      {
-        person.favoriteFoods.push(foodToAdd);
-         person.save().then((saveDoc)=>
-         {
-          if  (saveDoc===person)
-           {
-             done(null,person)
-           }
-           else
-           {
-             done(doc,person);
-             console.log("El documento no pudo ser salvado: ",doc)
-           }
-        }) 
-        personEdit=person;     
-      }
-
-  });
+          .then((person)=>{
+              if (person)
+              {
+                if (person.favoriteFoods.every(food=>food!==foodToAdd))
+                    person.favoriteFoods.push(foodToAdd);
+                person.save()
+                .then((saveDoc)=>
+                  {
+                    if  (saveDoc===person)
+                    {
+                      done(null,person)
+                    }
+                    else
+                    {
+                      done(doc,person);
+                      console.log("El documento no pudo ser salvado: ",doc)
+                    }
+                  })                 
+              }
+            personEdit=person;    
+          });
  
   return personEdit;
  
 
 };
 
-/*
+
  const dataPerson = {name:'yordanis',age:42,favoriteFoods:['cad1','cad2']} 
  const myDone=(obj,doc)=>{
   if (obj)
     console.log("Un error al salvar los datos: ",doc); 
  
 }
- 
-const modelYordanis= findEditThenSave('610044f5f9f98d737489c17b',myDone).then((result)=>{
-  console.log(result);
-});
+//createAndSavePerson(dataPerson,myDone).then(result=>console.log(result));
+findEditThenSave('610057b8cf0c8064f47d8926',myDone).then(result=>console.log(result));
 
-*/
+
 
 const findAndUpdate = (personName, done) => {
   const ageToSet = 20;
