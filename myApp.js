@@ -70,7 +70,7 @@ var arrayOfPeople = [
         }
         else
         {
-          done(null,doc);
+          done(doc,doc);
           console.log("El documento no pudo ser salvado: ",doc)
         }
      })
@@ -92,8 +92,15 @@ createManyPeople(arrayOfPeople,(obj,doc)=>{
  
 });*/
 
-const findPeopleByName = (personName, done) => {
-  done(null /*, data*/);
+const findPeopleByName = async (personName, done) => {
+  return await Person.find({name:personName},(error,resp)=>{
+    if (error)
+    {
+      console.log(error);
+    }
+    done(error,resp);
+  })
+  
 };
 
 const findOneByFood = (food, done) => {
