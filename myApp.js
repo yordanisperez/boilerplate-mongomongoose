@@ -51,7 +51,7 @@ const Person =model('Person', personSchema);;
 
 
 
-/* data person jsom {name:'yordanis',age:42,favoriteFoods:['cad1','cad2']} */
+
 
 var arrayOfPeople = [
   {name: "Pablo", age: 15, favoriteFoods: ["firsh"]},
@@ -61,7 +61,7 @@ var arrayOfPeople = [
 
  const  createAndSavePerson = async (dataPerson,done) => 
  {
-      const doc = new Person (dataPerson);
+      let doc = new Person (dataPerson);
       await doc.save().then((saveDoc)=>
       {
        if  (saveDoc===doc)
@@ -74,7 +74,7 @@ var arrayOfPeople = [
           console.log("El documento no pudo ser salvado: ",doc)
         }
      })
-      
+      return doc;
   
 };
 
@@ -85,21 +85,20 @@ const createManyPeople = async (arrayOfPeople, done) => {
   });
  
 };
-/*
-createManyPeople(arrayOfPeople,(obj,doc)=>{
-  if (!obj)
-    console.log("Un error al salvar los datos: ",doc); 
- 
-});*/
 
 const findPeopleByName = async (personName, done) => {
-  return await Person.find({name:personName},(error,resp)=>{
-    if (error)
-    {
-      console.log(error);
-    }
-    done(error,resp);
+  let modelPerson=[];
+  await Person.find({name:personName},(error,resp)=>{
+      if (error)
+      {
+        console.log(error);
+      }
+      done(error,resp);
+      modelPerson=resp;
+      
   })
+  
+  return modelPerson;
   
 };
 
@@ -115,35 +114,65 @@ const findOneByFood = async (food, done) => {
 };
 
 const findPersonById = async (personId, done) => {
-  return await Person.findById(personId,(error,resp)=>{
+   let person;
+   await Person.findById(personId,(error,resp)=>{
     if (error)
     {
       console.log(error);
     }
     done(error,resp);
+    person=resp;
   })
-  
+  return person;
 };
+
+
+
+
 
 const findEditThenSave = async (personId, done) => {
   const foodToAdd = "hamburger";
-  let modelPersonId=  findPersonById(personId,done).then((result)=>result);
-  modelPersonId.favoriteFoods.push(foodToAdd);
-  
-  await modelPersonId.save().then((saveDoc)=>
-  {
-   if  (saveDoc===modelPersonId)
-    {
-      done(null,modelPersonId)
-    }
-    else
-    {
-      done(modelPersonId,modelPersonId);
-      console.log("El documento no pudo ser salvado: ",modelPersonId)
-    }
- })
+  let personEdit;
+  await findPersonById(personId,done)
+  .then((person)=>{
+      if (person)
+      {
+        person.favoriteFoods.push(foodToAdd);
+         person.save().then((saveDoc)=>
+         {
+          if  (saveDoc===person)
+           {
+             done(null,person)
+           }
+           else
+           {
+             done(doc,person);
+             console.log("El documento no pudo ser salvado: ",doc)
+           }
+        }) 
+        personEdit=person;     
+      }
+
+  });
+ 
+  return personEdit;
+ 
 
 };
+
+/*
+ const dataPerson = {name:'yordanis',age:42,favoriteFoods:['cad1','cad2']} 
+ const myDone=(obj,doc)=>{
+  if (obj)
+    console.log("Un error al salvar los datos: ",doc); 
+ 
+}
+ 
+const modelYordanis= findEditThenSave('610044f5f9f98d737489c17b',myDone).then((result)=>{
+  console.log(result);
+});
+
+*/
 
 const findAndUpdate = (personName, done) => {
   const ageToSet = 20;
