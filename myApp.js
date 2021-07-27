@@ -130,13 +130,19 @@ const findEditThenSave = async (personId, done) => {
   const modelPersonId= await findPersonById(personId,done);
   modelPersonId.favoriteFoods.push(foodToAdd);
   
-  return await Person.updateOne(personId,{favoriteFoods:modelPersonId.favoriteFoods},(error,resp)=>{
-    if (error)
+  await modelPersonId.save().then((saveDoc)=>
+  {
+   if  (saveDoc===modelPersonId)
     {
-      console.log(error);
+      done(null,modelPersonId)
     }
-    done(error,resp);
-  })
+    else
+    {
+      done(modelPersonId,modelPersonId);
+      console.log("El documento no pudo ser salvado: ",modelPersonId)
+    }
+ })
+
 };
 
 const findAndUpdate = (personName, done) => {
