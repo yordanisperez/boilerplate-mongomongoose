@@ -59,22 +59,33 @@ var arrayOfPeople = [
   {name: "Albert", age: 34, favoriteFoods: ["Bear"]}
 ];
 
- const  createAndSavePerson = (dataPerson,done) => {
-  const doc = new Person (dataPerson);
-     doc.save(()=>{
-     done(null , doc);
-      console.log(doc);
-  });
+ const  createAndSavePerson = async (dataPerson,done) => 
+ {
+      const doc = new Person (dataPerson);
+     await doc.save().then((saveDoc)=>
+      {
+       if  (saveDoc===doc)
+          done(saveDoc,doc)
+        else
+          done(null,doc);
+     })
+      
   
 };
 
 const createManyPeople = (arrayOfPeople, done) => {
   console.log("Array de dato: ",arrayOfPeople);
-  arrayOfPeople.array.forEach(element => {
-    createAndSavePerson(element);
+  arrayOfPeople.forEach(element => {
+    createAndSavePerson(element,done);
   });
  
 };
+/*
+createManyPeople(arrayOfPeople,(obj,doc)=>{
+  if (!obj)
+    console.log("Un error al salvar los datos: ",doc); 
+ 
+});*/
 
 const findPeopleByName = (personName, done) => {
   done(null /*, data*/);
