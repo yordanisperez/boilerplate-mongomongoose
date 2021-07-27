@@ -8,7 +8,8 @@ async function connect(strHost){
   const dbmongo= await  mongoose.connect(strHost,{
     useNewUrlParser:true,
     useUnifiedTopology:true,
-    useCreateIndex: true
+    useCreateIndex: true,
+    useFindAndModify:false
   })
   .then(db=>console.log("Moongose se ha conectado :"))
   .catch(error=>console.log('Ha ocurrido un error en el momento de conectar a mongo db'));
@@ -170,7 +171,7 @@ const findEditThenSave = async (personId, done) => {
 const findAndUpdate = async (personName, done) => {
   const ageToSet = 20;
   let personEdit;
-  await Person.findOneAndUpdate({name:personName},{age:ageToSet},{ new: true ,useFindAndModify:false},myDone)
+  await Person.findOneAndUpdate({name:personName},{age:ageToSet},{ new: true },myDone)
           .then((person)=>{
               if (person)
               {
@@ -195,13 +196,11 @@ const removeById = async (personId, done) => {
   let personDel;
   await Person.findByIdAndRemove(personId,myDone)
   .then((person)=>{
- 
-      console.log('removeById: ',person);
-      done(null,person);
-      personDel=person; 
+      done(null,{_id:personId});
+      personDel={_id:personId}; 
     })
   .catch((error)=>{
-      done(error,person);
+      done(error,{_id:personId});
   });
 
 return personDel;
