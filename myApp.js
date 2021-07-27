@@ -62,7 +62,7 @@ var arrayOfPeople = [
  const  createAndSavePerson = async (dataPerson,done) => 
  {
       const doc = new Person (dataPerson);
-     await doc.save().then((saveDoc)=>
+      await doc.save().then((saveDoc)=>
       {
        if  (saveDoc===doc)
         {
@@ -81,7 +81,7 @@ var arrayOfPeople = [
 const createManyPeople = async (arrayOfPeople, done) => {
   console.log("Array de dato: ",arrayOfPeople);
   arrayOfPeople.forEach(element => {
-    await createAndSavePerson(element,done);
+     createAndSavePerson(element,done);
   });
  
 };
