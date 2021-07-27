@@ -62,10 +62,10 @@ const Person =model('Person', personSchema);;
 };
 
 const createManyPeople = (arrayOfPeople, done) => {
-  for (let i=0;i<arrayOfPeople.length;i++)
-     {
-       createAndSavePerson(arrayOfPeople[i]);
-     }
+  console.log("Array de dato: ",arrayOfPeople);
+  arrayOfPeople.array.forEach(element => {
+    createAndSavePerson(element);
+  });
   done(null , arrayOfPeople);
 };
 
