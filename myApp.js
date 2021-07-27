@@ -195,15 +195,16 @@ const dataPerson = {name:'yordanis',age:42,favoriteFoods:['cad1','cad2']}
 const removeById = async (personId, done) => {
   let personDel;
   await Person.findByIdAndRemove(personId,(error,data)=>{
+    done(error,data);
     personDel=data;
   })
-  .then((person)=>{
+ /* .then((person)=>{
       done(null,personDel);
     })
   .catch((error)=>{
       done(error,personDel);
   });
-
+*/
 return personDel;
 };
 
