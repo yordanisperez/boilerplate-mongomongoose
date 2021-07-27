@@ -127,7 +127,7 @@ const findPersonById = async (personId, done) => {
 
 const findEditThenSave = async (personId, done) => {
   const foodToAdd = "hamburger";
-  const modelPersonId= await findPersonById(personId,done);
+  const modelPersonId= await findPersonById(personId,done).then((result)=>result);
   modelPersonId.favoriteFoods.push(foodToAdd);
   
   await modelPersonId.save().then((saveDoc)=>
