@@ -49,11 +49,16 @@ const personSchema = new Schema({
 
 const Person =model('Person', personSchema);;
 
-const doc = new Person ({name:'yordanis',age:42,favoriteFoods:['cad1','cad2']});
-console.log(doc);
 
-const createAndSavePerson = (done) => {
-  done(null /*, data*/);
+
+
+ const  createAndSavePerson = (done) => {
+  const doc = new Person ({name:'yordanis',age:42,favoriteFoods:['cad1','cad2']});
+     doc.save(()=>{
+     done(null , doc);
+      console.log(doc);
+  });
+  
 };
 
 const createManyPeople = (arrayOfPeople, done) => {
