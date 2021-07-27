@@ -194,13 +194,14 @@ const dataPerson = {name:'yordanis',age:42,favoriteFoods:['cad1','cad2']}
 
 const removeById = async (personId, done) => {
   let personDel;
-  await Person.findByIdAndRemove(personId,myDone)
+  await Person.findByIdAndRemove(personId,(error,data)=>{
+    personDel=data;
+  })
   .then((person)=>{
-      done(null,{_id:personId});
-      personDel={_id:personId}; 
+      done(null,personDel);
     })
   .catch((error)=>{
-      done(error,{_id:personId});
+      done(error,personDel);
   });
 
 return personDel;
