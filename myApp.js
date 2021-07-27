@@ -165,18 +165,33 @@ const findEditThenSave = async (personId, done) => {
 };
 
 
- const dataPerson = {name:'yordanis',age:42,favoriteFoods:['cad1','cad2']} 
+ 
+
+const findAndUpdate = async (personName, done) => {
+  const ageToSet = 20;
+  let personEdit;
+  await Person.findOneAndUpdate({name:personName},{age:ageToSet},{ new: true },myDone)
+          .then((person)=>{
+              if (person)
+              {
+                done(null,person);
+              } 
+              personEdit=person; 
+            })
+          .catch((error)=>{
+              done(error,person);
+          });
+ 
+  return personEdit;
+};
+
+const dataPerson = {name:'yordanis',age:42,favoriteFoods:['cad1','cad2']} 
 
 //createAndSavePerson(dataPerson,myDone).then(result=>console.log(result));
-findEditThenSave('610057b8cf0c8064f47d8926',myDone).then(result=>console.log(result));
+findAndUpdate('yordanis',myDone).then(result=>console.log(result));
 
 
 
-const findAndUpdate = (personName, done) => {
-  const ageToSet = 20;
-
-  done(null /*, data*/);
-};
 
 const removeById = (personId, done) => {
   done(null /*, data*/);
