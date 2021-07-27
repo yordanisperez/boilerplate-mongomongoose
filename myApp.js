@@ -65,18 +65,23 @@ var arrayOfPeople = [
      await doc.save().then((saveDoc)=>
       {
        if  (saveDoc===doc)
-          done(saveDoc,doc)
+        {
+          done(null,doc)
+        }
         else
+        {
           done(null,doc);
+          console.log("El documento no pudo ser salvado: ",doc)
+        }
      })
       
   
 };
 
-const createManyPeople = (arrayOfPeople, done) => {
+const createManyPeople = async (arrayOfPeople, done) => {
   console.log("Array de dato: ",arrayOfPeople);
   arrayOfPeople.forEach(element => {
-    createAndSavePerson(element,done);
+    await createAndSavePerson(element,done);
   });
  
 };
