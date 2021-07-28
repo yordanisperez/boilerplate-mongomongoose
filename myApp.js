@@ -128,11 +128,7 @@ const findPersonById = async (personId, done) => {
 };
 
 
-const myDone=(obj,doc)=>{
-  if (obj)
-    console.log("Un error al salvar los datos: ",doc); 
- 
-}
+
 
 const findEditThenSave = async (personId, done) => {
   const foodToAdd = "hamburger";
@@ -186,7 +182,7 @@ const findAndUpdate = async (personName, done) => {
   return personEdit;
 };
 
-const dataPerson = {name:'mary',age:42,favoriteFoods:['cad1','cad2']} 
+const dataPerson = {name:'Mary',age:42,favoriteFoods:['burrito','cad2']} 
 
 
 //findAndUpdate('yordanis',myDone).then(result=>console.log(result));
@@ -208,7 +204,7 @@ return personDel;
 const removeManyPeople = async (done) => {
   const nameToRemove = "Mary";
   let dataRem;
-  await Person.remove({name:nameToRemove},(error,data)=>{
+  await Person.deleteMany({name:nameToRemove},(error,data)=>{
     done(error,data)
     dataRem=data;
   })
@@ -216,17 +212,42 @@ const removeManyPeople = async (done) => {
   return dataRem;
 };
 
-createAndSavePerson(dataPerson,myDone)
-        .then(result=>{
-          removeManyPeople(myDone)
-           .then(result=>console.log(result));
-        });
 
-const queryChain = (done) => {
+
+const queryChain = async (done) => {
   const foodToSearch = "burrito";
 
-  done(null /*, data*/);
+  await Person.find({favoriteFoods:'burrito'}).sort({"name":1}).limit(2).select('-age')
+    .exec((error,data)=>{
+          dataQuery=data;
+          done(error,data);  
+                
+  
+
+  })
+
 };
+
+
+
+const myDone=(obj,doc)=>{
+  if (obj)
+    console.log("Un error al salvar los datos: ",doc); 
+ 
+}
+createAndSavePerson(dataPerson,myDone)
+        .then(result=>{
+            console.log("Creado y salvado: ",result);
+            queryChain((error,dataQuery)=>{
+                console.log("Datos de la consulta: ",dataQuery);
+                }).then(()=>{
+                    removeManyPeople(myDone).then((result3)=>{
+                    console.log("Deleted: ",result3);
+            })
+          })
+ 
+        });
+
 
 /** **Well Done !!**
 /* You completed these challenges, let's go celebrate !
